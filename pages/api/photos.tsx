@@ -8,6 +8,7 @@ export default withSession(async(req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
     const page = +req.query.page || 0
+    console.log(db, page)
     const data = Array(10)
       .fill(0)
       .map((_, i) => {
