@@ -1,0 +1,11 @@
+{
+    "fakeDb": {
+        "user": "test",
+        "password": "test",
+        "email": "test@test.pl",
+        "userId": 1233223
+    },
+    "production": false,
+    "cookiesCrypt": "asdqweasdqwerfgthbvcdfgbnhjmkiiu",
+    "cookieName": "appcookie"
+}

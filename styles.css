@@ -1,0 +1,25 @@
+form label {
+  display: flex;
+  justify-content: space-between;
+  max-width: 220px;
+}
+.listview.listview {
+  flex: 0 0 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 100%;
+}
+.heartfavorite {
+  position: absolute;
+  right:7px;
+  top: 7px;
+  color: white;
+}
+.phototitle {
+  width: 100px;
+  height: 100px;
+  color: white;
+}
+.phototitleblack {
+  color: #3f3f3f;
+}
