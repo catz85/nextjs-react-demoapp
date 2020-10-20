@@ -1,14 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { generatePhotoUrl } from '../../lib/colors';
-import db from '../../lib/fakeDb';
+import {imagesColl} from '../../lib/fakeDb';
 import withSession from "../../lib/session";
 export default withSession(async(req: NextApiRequest, res: NextApiResponse) => {
     if (!req.query.page) {
         res.status(404).send('!page')
         return;
     }
-    const page = +req.query.page || 0
-    console.log(db, page)
+    const page = +req.query.page || 0;
     const data = Array(10)
       .fill(0)
       .map((_, i) => {
@@ -18,7 +17,7 @@ export default withSession(async(req: NextApiRequest, res: NextApiResponse) => {
             url: generatePhotoUrl(page * 10 + i,600),
             thumbnailUrl: generatePhotoUrl(page * 10 + i,100),
             imageId: page * 10 + i,
-            favorite: !!db[page * 10 + i]
+            favorite: !!imagesColl.find({'imageId': page * 10 + i})[0]
         }
       })
     const nextId = page < 100 ? page + 1 : null

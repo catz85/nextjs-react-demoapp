@@ -142,7 +142,7 @@ function Photos() {
                             backgroundImage: `url(${photo.url})`,
                             backgroundPosition: 'center center',
                             backgroundSize: 'cover'
-                          }} onClick={() => { router.push(`/photo/${photo.imageId}`) }} key={`grid-${photo.imageId}`}>
+                          }} onClick={() => { router.push(`/photos/${photo.imageId}`) }} key={`grid-${photo.imageId}`}>
                             <p className='phototitle' key={`image-${photo.imageId}`}>
                               {photo.title}
                             </p>

@@ -1,5 +1,5 @@
 import withSession from "../../lib/session";
-import db from '../../lib/fakeDb';
+import { imagesColl } from '../../lib/fakeDb';
 import { generatePhotoUrl } from '../../lib/colors';
 const itemsPerPage = 10;
 
@@ -13,29 +13,27 @@ export default withSession(async (req, res) => {
         case "POST":
             console.log('POST')
             const page = parseInt(req.query.page) || 0;
-            const favorites = Object.keys(db).sort(function(a:any, b:any) {
-                return a - b;
-              }).map(el=>db[el])
+            const favorites = imagesColl.find().sort(function(a:any, b:any) {
+                return a.imageId - b.imageId;
+            })
             
             const data = favorites.slice(page * itemsPerPage, (page + 1) * itemsPerPage)
             const nextId = page < (favorites.length - itemsPerPage) / itemsPerPage ? page + 1 : null
             res.json({ data, nextId })
             break;
         case "DELETE":
-            console.log('DELETE')
-            console.log('DATABASE', db)
             imageId = parseInt(req.query.imageId);
             if (isNaN(imageId)) {
                 res.status(404).json({ error: true, message: "Element not found!" })
                 break;
             }
-            const deletingKey = db[imageId];
+            const deletingKey = imagesColl.find({'imageId': imageId})[0]
             console.log(deletingKey, imageId)
             if (!deletingKey) {
                 res.status(404).json({ error: true, message: "Element not found!" })
                 break;
             }
-            delete db[imageId]
+            imagesColl.remove(deletingKey)
             res.json({ error: false, message: "Deleted!", deletingKey });
             break;
         case "PUT":
@@ -45,17 +43,16 @@ export default withSession(async (req, res) => {
                 res.status(404).json({ error: true, message: "Element not found!" })
                 break;
             }
-            let key = db[imageId]
-            console.log('DATABASE', db)
+            let key = imagesColl.find({'imageId': imageId})[0]
             if (!key) {
-                key = db[imageId] = {
+                key = imagesColl.insert({
                     albumId: Math.floor(imageId / 10),
                     title: 'Photo ' + imageId,
                     url: generatePhotoUrl(imageId, 600),
                     thumbnailUrl: generatePhotoUrl(imageId, 100),
                     favorite: true,
                     imageId,
-                };
+                })
             }
             res.json({ error: false, message: "Added!", key });
             break;

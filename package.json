@@ -1,5 +1,5 @@
 {
-  "name": "polsat-test",
+  "name": "nextjs-react-demo",
   "version": "1.0.0",
   "description": "",
   "main": "pages/index.tsx",
@@ -12,7 +12,6 @@
     "next": "next"
   },
   "keywords": [],
-  "author": "Ivan Burykin",
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
@@ -29,6 +28,7 @@
     "jsonwebtoken": "^8.5.1",
     "ky": "^0.24.0",
     "ky-universal": "^0.8.2",
+    "lokijs": "^1.5.11",
     "next": "^9.5.5",
     "next-auth": "^3.1.0",
     "next-iron-session": "^4.1.9",

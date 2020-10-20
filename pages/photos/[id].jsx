@@ -5,7 +5,7 @@ import Router from 'next/router';
 import { Container, Row, Col } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import withSession from "../../lib/session";
-import db from '../../lib/fakeDb';
+import { imagesColl } from '../../lib/fakeDb';
 import axios from 'axios';
 import { generatePhotoUrl } from '../../lib/colors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -103,7 +103,7 @@ export const getServerSideProps = withSession(async function ({ req, res, params
                 url: generatePhotoUrl(+params.id, 600),
                 thumbnailUrl: generatePhotoUrl(+params.id, 100),
                 imageId: +params.id,
-                favorite: !!db[+params.id]
+                favorite: !!imagesColl.find({'imageId': +params.id})[0]
             }
         },
     };
