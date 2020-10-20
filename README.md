@@ -1,2 +1,5 @@
 # nextjs-react-demoapp
-https://nextjs-react-demoapp.vercel.app/
+https://nextjs-react-demoapp.herokuapp.com/
+
+
+if application restarts we losing all data, because of fakeDB.
