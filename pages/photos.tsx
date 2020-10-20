@@ -40,11 +40,11 @@ function Photos() {
   const [favoriteState, setFavoriteState] = useState([])
   const [favoriteMutation] = useMutation(imageId => axios.put(`/api/favorite?imageId=${imageId}`))
   const [unFavoriteMutation] = useMutation(imageId => axios.delete(`/api/favorite?imageId=${imageId}`))
-  const [grid, setGrid] = useState(false)
+  const [grid, setGrid] = useState(typeof localStorage !== "undefined" && !!+localStorage.getItem('grid'))
   const [intersect, setIntersect] = useState(false)
   const [favoriteHandler,setFavoriteHandler] = useState({})
   const loadMoreButtonRef = React.useRef()
-  const favorite = (imageId, page) => {
+  const favorite = (imageId:any, page:any) => {
     if (favoriteHandler[imageId]) return;
     const update = {}
     update[imageId] = true
@@ -54,7 +54,7 @@ function Photos() {
         onSuccess: (response, variables) => {
           update[imageId] = false
           setFavoriteHandler(update);
-          const imageIndex = data[page].data.findIndex((el)=>{if (el.imageId==imageId) {return true} else {return false}})
+          const imageIndex = data[page].data.findIndex((el:any)=>{if (el.imageId==imageId) {return true} else {return false}})
           console.log('ImageIndex', imageIndex)
           data[page].data[imageIndex].favorite = true
           setFavoriteState(data.reduce((prev, next)=> {
@@ -78,11 +78,11 @@ function Photos() {
         onSuccess: (response, variables) => {
           update[imageId] = false
           setFavoriteHandler(update);
-          const imageIndex = data[page].data.findIndex((el)=>{if (el.imageId==imageId) {return true} else {return false}})
+          const imageIndex = data[page].data.findIndex((el:any)=>{if (el.imageId==imageId) {return true} else {return false}})
           console.log('ImageIndex', imageIndex)
           data[page].data[imageIndex].favorite = false
           setFavoriteState(data.reduce((prev, next)=> {
-            return prev.concat(next.data.map((el)=>{return el.favorite}))
+            return prev.concat(next.data.map((el:any)=>{return el.favorite}))
           },[]))
         },
         onError: (err, variables) => {
@@ -100,6 +100,10 @@ function Photos() {
   const handleSearchTermChange = event => {
     setSearchTerm(event.target.value);
   };
+  const setGridFn = (grid:boolean) => {
+    setGrid(grid);
+    localStorage.setItem('grid', grid ? '1' : '0');
+  }
   useEffect(()=> {
   }, [JSON.stringify(favoriteState.concat([searchTerm]))])
   return (
@@ -117,7 +121,7 @@ function Photos() {
                 <div>
                 <Row>
                 <Col >
-                  <Button onClick={() => setGrid(!grid)}>{grid ? 'List View' : 'Grid View'}</Button>
+                  <Button onClick={() => setGridFn(!grid)}>{grid ? 'List View' : 'Grid View'}</Button>
                   {' '}
                   <Button onClick={() => setIntersect(!intersect)}>{intersect ? 'Dont load on scroll' : 'Load on scroll'}</Button>
                 </Col>

@@ -40,7 +40,7 @@ function Photos() {
   const [favoriteState, setFavoriteState] = useState([])
   const [favoriteMutation] = useMutation(imageId => axios.put(`/api/favorite?imageId=${imageId}`))
   const [unFavoriteMutation] = useMutation(imageId => axios.delete(`/api/favorite?imageId=${imageId}`))
-  const [grid, setGrid] = useState(false)
+  const [grid, setGrid] = useState(typeof localStorage !== "undefined" && !!+localStorage.getItem('grid'))
   const [intersect, setIntersect] = useState(false)
   const [favoriteHandler,setFavoriteHandler] = useState({})
   const loadMoreButtonRef = React.useRef()
@@ -100,8 +100,11 @@ function Photos() {
   const handleSearchTermChange = event => {
     setSearchTerm(event.target.value);
   };
-  useEffect(()=> {
-  }, [JSON.stringify(favoriteState.concat([searchTerm]))])
+
+  const setGridFn = (grid:boolean) => {
+    setGrid(grid);
+    localStorage.setItem('grid', grid ? '1' : '0');
+  }
   return (
     <>
       <Container>
@@ -117,7 +120,7 @@ function Photos() {
                 <div>
                 <Row>
                 <Col >
-                  <Button onClick={() => setGrid(!grid)}>{grid ? 'List View' : 'Grid View'}</Button>
+                  <Button onClick={() => setGridFn(!grid)}>{grid ? 'List View' : 'Grid View'}</Button>
                   {' '}
                   <Button onClick={() => setIntersect(!intersect)}>{intersect ? 'Dont load on scroll' : 'Load on scroll'}</Button>
                 </Col>
