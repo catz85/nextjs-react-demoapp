@@ -1,5 +1,5 @@
 import withSession from "../../lib/session";
-import { imagesColl } from '../../lib/fakeDb';
+import db from '../../lib/fakeDb';
 import { generatePhotoUrl } from '../../lib/colors';
 const itemsPerPage = 10;
 
@@ -13,7 +13,7 @@ export default withSession(async (req, res) => {
         case "POST":
             console.log('POST')
             const page = parseInt(req.query.page) || 0;
-            const favorites = imagesColl.find().sort(function(a:any, b:any) {
+            const favorites = db.collection.find().sort(function(a:any, b:any) {
                 return a.imageId - b.imageId;
             })
             
@@ -27,13 +27,13 @@ export default withSession(async (req, res) => {
                 res.status(404).json({ error: true, message: "Element not found!" })
                 break;
             }
-            const deletingKey = imagesColl.find({'imageId': imageId})[0]
+            const deletingKey = db.collection.find({'imageId': imageId})[0]
             console.log(deletingKey, imageId)
             if (!deletingKey) {
                 res.status(404).json({ error: true, message: "Element not found!" })
                 break;
             }
-            imagesColl.remove(deletingKey)
+            db.collection.remove(deletingKey)
             res.json({ error: false, message: "Deleted!", deletingKey });
             break;
         case "PUT":
@@ -43,9 +43,9 @@ export default withSession(async (req, res) => {
                 res.status(404).json({ error: true, message: "Element not found!" })
                 break;
             }
-            let key = imagesColl.find({'imageId': imageId})[0]
+            let key = db.collection.find({'imageId': imageId})[0]
             if (!key) {
-                key = imagesColl.insert({
+                key = db.collection.insert({
                     albumId: Math.floor(imageId / 10),
                     title: 'Photo ' + imageId,
                     url: generatePhotoUrl(imageId, 600),
